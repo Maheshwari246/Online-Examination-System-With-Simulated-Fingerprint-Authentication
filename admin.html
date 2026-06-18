@@ -201,7 +201,13 @@ function show(){
 }  
   
 show();  
-  
-window.location.href = "exam.html";  
+  if (loginSuccess == true) {
+    window.location.href = "admin.html";
+
+    setTimeout(() => {
+        window.location.href = "exam.html";
+    }, 2000);
+  }
+
 </script>  </body>  
 </html>
