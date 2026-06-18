@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Online Exam System</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',Arial,sans-serif;
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+    text-align:center;
+    margin:0;
+    padding:20px;
+    min-height:100vh;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+.card{
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(10px);
+    padding:20px;
+    margin:15px auto;
+    border-radius:24px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    border:1px solid rgba(255,255,255,0.2);
+}
+
+h2{
+    margin:0 0 15px;
+}
+
+input{
+    width:80%;
+    padding:12px;
+    border:none;
+    border-radius:50px;
+    margin:10px 0;
+    outline:none;
+    text-align:center;
+    font-size:16px;
+}
+
+button{
+    padding:10px 22px;
+    margin:6px;
+    border:none;
+    border-radius:50px;
+    background:#f39c12;
+    color:#111;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    background:#e67e22;
+    color:white;
+}
+
+.danger{
+    background:#e74c3c;
+    color:white;
+}
+
+.danger:hover{
+    background:#c0392b;
+}
+
+.timer-row{
+    display:flex;
+    justify-content:space-between;
+    background:rgba(0,0,0,0.35);
+    padding:12px;
+    border-radius:50px;
+    margin:10px 0;
+    font-weight:bold;
+}
+
+.score-box{
+    background:rgba(0,0,0,0.35);
+    padding:10px;
+    border-radius:50px;
+    margin:10px 0;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.options{
+    margin-top:20px;
+    text-align:left;
+}
+
+.options label{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:10px 0;
+    padding:12px 18px;
+    background:rgba(255,255,255,0.15);
+    border-radius:50px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.options label:hover{
+    background:rgba(255,255,255,0.28);
+}
+
+.next-btn{
+    width:100%;
+    margin-top:15px;
+    background:#27ae60;
+    color:white;
+    font-size:16px;
+}
+
+.next-btn:hover{
+    background:#1e8449;
+}
+
+.correct{
+    background:rgba(39,174,96,0.25);
+    color:#a3e4d7;
+    padding:10px;
+    border-radius:50px;
+    display:inline-block;
+}
+
+.wrong{
+    background:rgba(231,76,60,0.25);
+    color:#f5b7b1;
+    padding:10px;
+    border-radius:50px;
+    display:inline-block;
+}
+
+.info{
+    background:rgba(241,196,15,0.25);
+    color:#f9e79f;
+    padding:10px;
+    border-radius:50px;
+    display:inline-block;
+}
+
+#question{
+    margin-top:15px;
+    font-size:20px;
+    line-height:1.5;
+}
+
+.rule-box{
+    background:rgba(241,196,15,0.12);
+    padding:12px;
+    border-radius:16px;
+    margin-bottom:15px;
+}
+
+#data{
+    max-height:300px;
+    overflow-y:auto;
+    text-align:left;
+    background:rgba(0,0,0,0.25);
+    padding:12px;
+    border-radius:15px;
+    margin-top:10px;
+}
+
+#data p{
+    border-bottom:1px solid rgba(255,255,255,0.1);
+    padding:6px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>📚 Online Exam System</h2>
+
+<div class="card">
+
+<input type="text"
+id="studentName"
+placeholder="Enter Your Name">
+
+<br>
+
+<button onclick="startExam()">
+🚀 Start Exam
+</button>
+
+<button onclick="resetQuestions()" class="danger">
+🔄 Reset Questions
+</button>
+
+<button onclick="exitExam()" class="danger">
+❌ Exit
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="rule-box">
+
+📊 <b>Marking:</b>
+
+✅ Correct:
+<span style="color:#a3e4d7;">+1</span>
+
+|
+
+❌ Wrong:
+<span style="color:#f5b7b1;">-0.25</span>
+
+|
+
+⏰ Timeout:
+<span style="color:#f9e79f;">0 Cut</span>
+
+</div>
+
+<div class="timer-row">
+
+<span>
+⏱️ Total Time:
+<span id="totalTimer">600</span> sec
+</span>
+
+<span>
+⏳ Question Time:
+<span id="qTimer">60</span> sec
+</span>
+
+</div>
+
+<div class="score-box" id="scoreBox">
+🎯 Score: 0.00
+</div>
+
+<div id="question"></div>
+
+<div id="options"></div>
+
+<div id="feedback"></div>
+
+<div id="result"></div>
+
+</div>
+
+<div class="card">
+
+<button onclick="showHistory()">
+📋 My History
+</button>
+
+<button onclick="showTop5()">
+🏆 Top 5
+</button>
+
+<button onclick="showAllResults()">
+📊 All Results
+</button>
+
+<div id="data"></div>
+
+</div>
+
+</div>
+
+<script>
+
+"use strict";
+// ==========================
+// QUESTIONS
+// ==========================
+
+const DEFAULT_QUESTIONS = [
+
+{
+text:"CPU stands for?",
+options:[
+"Central Processing Unit",
+"Control Unit",
+"Computer Process",
+"None"
+],
+answer:"Central Processing Unit"
+},
+
+{
+text:"Python is used for?",
+options:[
+"All",
+"AI",
+"Web",
+"Game"
+],
+answer:"All"
+},
+
+{
+text:"Which is Database?",
+options:[
+"MySQL",
+"Google",
+"HTML",
+"Chrome"
+],
+answer:"MySQL"
+},
+
+{
+text:"HTML stands for?",
+options:[
+"Hyper Text Markup Language",
+"High Text Markup Language",
+"Hyper Tabular Markup Language",
+"None"
+],
+answer:"Hyper Text Markup Language"
+},
+
+{
+text:"Which language is used for AI?",
+options:[
+"Python",
+"C",
+"Java",
+"All"
+],
+answer:"Python"
+},
+
+{
+text:"Which is search engine?",
+options:[
+"Chrome",
+"Google",
+"Python",
+"MySQL"
+],
+answer:"Google"
+},
+
+{
+text:"Which is programming language?",
+options:[
+"HTML",
+"CSS",
+"Python",
+"SQL"
+],
+answer:"Python"
+},
+
+{
+text:"Which is frontend framework?",
+options:[
+"React",
+"MySQL",
+"Python",
+"C"
+],
+answer:"React"
+},
+
+{
+text:"Which is DBMS?",
+options:[
+"MySQL",
+"Python",
+"HTML",
+"CSS"
+],
+answer:"MySQL"
+},
+
+{
+text:"Which is server-side language?",
+options:[
+"Python",
+"HTML",
+"CSS",
+"JavaScript"
+],
+answer:"Python"
+}
+
+];
+
+// ==========================
+// VARIABLES
+// ==========================
+
+let activeExam = false;
+let questionList = [];
+let currentIndex = 0;
+let totalScore = 0;
+let totalQuestions = 0;
+let studentName = "";
+let examSeconds = 600;
+let questionSeconds = 60;
+let examTimer = null;
+let questionTimer = null;
+let answered = false;
+
+// ==========================
+// ESCAPE HTML
+// ==========================
+
+function escapeHtml(str){
+
+if(str == null) return "";
+
+return String(str)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
+
+}
+
+// ==========================
+// UPDATE SCORE
+// ==========================
+
+function updateScore(){
+
+document.getElementById("scoreBox").innerHTML =
+`🎯 Score: ${totalScore.toFixed(2)}`;
+
+}
+
+// ==========================
+// STOP TIMERS
+// ==========================
+
+function stopTimers(){
+
+clearInterval(examTimer);
+clearInterval(questionTimer);
+
+}
+
+// ==========================
+// START EXAM
+// ==========================
+
+function startExam(){
+
+const name =
+document.getElementById("studentName")
+.value.trim();
+
+if(name === ""){
+
+alert("⚠️ Enter your name");
+
+return;
+
+}
+
+stopTimers();
+
+studentName = name;
+
+activeExam = true;
+
+currentIndex = 0;
+
+totalScore = 0;
+
+updateScore();
+
+document.getElementById("result").innerHTML = "";
+document.getElementById("feedback").innerHTML = "";
+document.getElementById("data").innerHTML = "";
+
+questionList = [...DEFAULT_QUESTIONS];
+
+// RANDOM QUESTIONS
+
+for(let i = questionList.length - 1; i > 0; i--){
+
+let j = Math.floor(Math.random() * (i + 1));
+
+[questionList[i],questionList[j]] =
+[questionList[j],questionList[i]];
+
+}
+
+totalQuestions = questionList.length;
+
+startExamTimer();
+
+showQuestion();
+
+}
+// ==========================
+// EXAM TIMER
+// ==========================
+
+function startExamTimer(){
+
+examSeconds = 600;
+
+document.getElementById("totalTimer").innerText =
+examSeconds;
+
+examTimer = setInterval(() => {
+
+if(!activeExam) return;
+
+if(examSeconds <= 1){
+
+endExam();
+
+}else{
+
+examSeconds--;
+
+document.getElementById("totalTimer").innerText =
+examSeconds;
+
+}
+
+},1000);
+
+}
+
+// ==========================
+// SHOW QUESTION
+// ==========================
+
+function showQuestion(){
+
+if(!activeExam) return;
+
+if(currentIndex >= totalQuestions){
+
+endExam();
+
+return;
+
+}
+
+answered = false;
+
+questionSeconds = 60;
+
+document.getElementById("qTimer").innerText =
+questionSeconds;
+
+let q = questionList[currentIndex];
+
+document.getElementById("question").innerHTML =
+
+`<b>
+📌 Question ${currentIndex + 1}
+of ${totalQuestions}
+</b>
+
+<br><br>
+
+${escapeHtml(q.text)}`;
+
+// RANDOMIZE OPTIONS
+
+let shuffledOptions = [...q.options];
+
+for(let i = shuffledOptions.length - 1; i > 0; i--){
+
+let j = Math.floor(Math.random() * (i + 1));
+
+[shuffledOptions[i], shuffledOptions[j]] =
+[shuffledOptions[j], shuffledOptions[i]];
+
+}
+
+q.currentOptions = shuffledOptions;
+
+// LABELS ALWAYS A B C D
+
+let letters = ["A","B","C","D"];
+
+let html = `<div class="options">`;
+
+for(let i = 0; i < shuffledOptions.length; i++){
+
+html += `
+
+<label>
+
+<input
+type="radio"
+name="option"
+value="${i}">
+
+<b>${letters[i]}.</b>
+
+${escapeHtml(shuffledOptions[i])}
+
+</label>
+
+`;
+
+}
+
+html += `</div>
+
+<button class="next-btn"
+onclick="submitAnswer()">
+
+➡ Submit Answer
+
+</button>`;
+
+document.getElementById("options").innerHTML = html;
+
+document.getElementById("feedback").innerHTML = "";
+
+startQuestionTimer();
+
+}
+
+// ==========================
+// QUESTION TIMER
+// ==========================
+
+function startQuestionTimer(){
+
+clearInterval(questionTimer);
+
+questionTimer = setInterval(() => {
+
+if(!activeExam || answered)
+return;
+
+if(questionSeconds <= 1){
+
+clearInterval(questionTimer);
+
+answered = true;
+
+let q = questionList[currentIndex];
+
+document.getElementById("feedback").innerHTML =
+
+`<div class="info">
+⏰ Time's Up! No Penalty<br>
+Correct Answer:
+${escapeHtml(q.answer)}
+</div>`;
+
+document.querySelectorAll(
+'input[name="option"]'
+).forEach(r => r.disabled = true);
+
+currentIndex++;
+
+setTimeout(showQuestion,1300);
+
+}else{
+
+questionSeconds--;
+
+document.getElementById("qTimer").innerText =
+questionSeconds;
+
+}
+
+},1000);
+
+}
+
+// ==========================
+// SUBMIT ANSWER
+// ==========================
+
+function submitAnswer(){
+
+if(!activeExam || answered)
+return;
+
+answered = true;
+
+clearInterval(questionTimer);
+
+let selected =
+document.querySelector(
+'input[name="option"]:checked'
+);
+
+let q = questionList[currentIndex];
+
+if(!selected){
+
+document.getElementById("feedback").innerHTML =
+
+`<div class="info">
+⚠️ No Option Selected<br>
+No Penalty<br>
+Correct Answer:
+${escapeHtml(q.answer)}
+</div>`;
+
+}else{
+
+let selectedIndex =
+parseInt(selected.value);
+
+let selectedAnswer =
+q.currentOptions[selectedIndex];
+
+if(selectedAnswer === q.answer){
+
+totalScore += 1;
+
+document.getElementById("feedback").innerHTML =
+
+`<div class="correct">
+✅ Correct! +1 Mark
+</div>`;
+
+}else{
+
+totalScore -= 0.25;
+
+document.getElementById("feedback").innerHTML =
+
+`<div class="wrong">
+❌ Wrong! -0.25 Mark<br>
+Correct Answer:
+${escapeHtml(q.answer)}
+</div>`;
+
+}
+
+updateScore();
+
+}
+
+document.querySelectorAll(
+'input[name="option"]'
+).forEach(r => r.disabled = true);
+
+currentIndex++;
+
+setTimeout(showQuestion,1300);
+
+}
+// ==========================
+// END EXAM
+// ==========================
+
+function endExam(){
+
+activeExam = false;
+
+stopTimers();
+
+let percent =
+((totalScore / totalQuestions) * 100)
+.toFixed(1);
+
+let results =
+JSON.parse(
+localStorage.getItem("examResults")
+) || [];
+
+results.push({
+
+name:studentName,
+score:totalScore,
+total:totalQuestions,
+date:new Date().toLocaleString()
+
+});
+
+localStorage.setItem(
+"examResults",
+JSON.stringify(results)
+);
+
+document.getElementById("result").innerHTML =
+
+`<div style="
+background:rgba(0,0,0,0.4);
+padding:15px;
+border-radius:20px;
+margin-top:15px;
+">
+
+<h3>
+📊 ${escapeHtml(studentName)}'s Result
+</h3>
+
+<h2>
+${totalScore.toFixed(2)}
+/
+${totalQuestions}
+</h2>
+
+<p>
+Percentage:
+${percent}%
+</p>
+
+</div>`;
+
+document.getElementById("question").innerHTML = "";
+document.getElementById("options").innerHTML = "";
+
+}
+
+// ==========================
+// RESET
+// ==========================
+
+function resetQuestions(){
+
+alert("✅ Questions Reset");
+
+location.reload();
+
+}
+
+// ==========================
+// EXIT
+// ==========================
+
+function exitExam(){
+
+activeExam = false;
+
+stopTimers();
+
+document.getElementById("question").innerHTML = "";
+document.getElementById("options").innerHTML = "";
+document.getElementById("feedback").innerHTML = "";
+document.getElementById("result").innerHTML = "";
+document.getElementById("data").innerHTML = "";
+
+document.getElementById("totalTimer").innerText = "600";
+document.getElementById("qTimer").innerText = "60";
+
+totalScore = 0;
+
+updateScore();
+
+}
+
+// ==========================
+// MY HISTORY
+// ==========================
+
+function showHistory(){
+
+let username = prompt(
+"Enter username to view history:"
+);
+
+if(!username || username.trim() === ""){
+
+alert("⚠️ Enter username");
+
+return;
+
+}
+
+username = username.trim().toLowerCase();
+
+let all =
+JSON.parse(
+localStorage.getItem("examResults")
+) || [];
+
+let userResults = all.filter(r =>
+r.name.toLowerCase() === username
+);
+
+let html = `
+<h3>
+📋 ${escapeHtml(username)} History
+</h3>
+`;
+
+if(userResults.length === 0){
+
+html += `
+<p>
+❌ No results found
+</p>
+`;
+
+}else{
+
+userResults.reverse().forEach(r => {
+
+html +=
+
+`<p>
+👤 ${escapeHtml(r.name)}
+<br>
+🎯 ${r.score.toFixed(2)}
+/
+${r.total}
+<br>
+📅 ${escapeHtml(r.date)}
+</p>`;
+
+});
+
+}
+
+document.getElementById("data").innerHTML =
+html;
+
+}
+// ==========================
+// TOP 5
+// ==========================
+
+function showTop5(){
+
+let all =
+JSON.parse(
+localStorage.getItem("examResults")
+) || [];
+
+all.sort((a,b)=>b.score-a.score);
+
+let top = all.slice(0,5);
+
+let html = "<h3>🏆 Top 5</h3>";
+
+top.forEach((r,i)=>{
+
+html +=
+
+`<p>
+${i+1}.
+${escapeHtml(r.name)}
+-
+${r.score.toFixed(2)}
+</p>`;
+
+});
+
+document.getElementById("data").innerHTML =
+html;
+
+}
+
+
+// ==========================
+// ALL RESULTS
+// ==========================
+
+function showAllResults(){
+
+let all =
+JSON.parse(
+localStorage.getItem("examResults")
+) || [];
+
+let html = "<h3>📊 All Results</h3>";
+
+all.reverse().forEach(r => {
+
+html +=
+
+`<p>
+👤 ${escapeHtml(r.name)}
+<br>
+🎯 ${r.score.toFixed(2)}
+/
+${r.total}
+<br>
+📅 ${escapeHtml(r.date)}
+</p>`;
+
+});
+
+document.getElementById("data").innerHTML =
+html;
+
+}
+
+// ==========================
+// INIT
+// ==========================
+
+window.onload = function(){
+
+updateScore();
+
+};
+
+</script>
+
+</body>
+</html>
