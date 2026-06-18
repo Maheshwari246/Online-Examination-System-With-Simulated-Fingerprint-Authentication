@@ -139,12 +139,13 @@ msg.style.color = "lightgreen";
 msg.innerText = "Fingerprint Successful ✅";
   
 } else {
+  window.location.href = "admin.html";
 let msg = document.getElementById("fpMsg");
 msg.style.color = "red";
 msg.innerText = "Fingerprint Failed ❌";
 }
 }
-window.location.href = "admin.html";
+
   
 </script>  </body>
 
