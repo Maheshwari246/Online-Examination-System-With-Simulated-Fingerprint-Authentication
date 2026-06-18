@@ -138,16 +138,6 @@ let msg = document.getElementById("fpMsg");
 msg.style.color = "lightgreen";
 msg.innerText = "Fingerprint Successful ✅";
 
-  alert(currentUser);
-
-setTimeout(() => {
-    if (currentUser === "admin") {
-        window.location.href = "admin.html";
-    } else {
-        window.location.href = "exam.html";
-    }
-}, 1000);
-         
 } else {
 let msg = document.getElementById("fpMsg");
 msg.style.color = "red";
@@ -158,3 +148,4 @@ msg.innerText = "Fingerprint Failed ❌";
 </script>  </body>
 
 </html>
+  
