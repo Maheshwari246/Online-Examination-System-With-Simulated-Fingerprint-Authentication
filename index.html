@@ -1,85 +1,76 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login System</title>
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
     }
 
     body {
-      font-family: Arial, sans-serif;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
       position: relative;
-      background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794') no-repeat center/cover;
+      overflow: hidden;
+      background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794') center/cover no-repeat;
     }
 
     body::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       z-index: 0;
-    }
-
-    .books-line {
-      position: absolute;
-      top: 20px;
-      left: -20%;
-      width: 200%;
-      font-size: 42px;
-      opacity: 0.25;
-      letter-spacing: 12px;
-      transform: rotate(45deg);
-      z-index: 1;
-      pointer-events: none;
     }
 
     .container {
       position: relative;
-      z-index: 2;
-      width: 320px;
-      padding: 35px;
-      border-radius: 20px;
-      text-align: center;
+      z-index: 1;
+      width: 90%;
+      max-width: 360px;
+      padding: 35px 25px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
       color: white;
-      background: rgba(255,255,255,0.16);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(255,255,255,0.25);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .container h2 {
+      margin-bottom: 18px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 12px 14px;
       margin: 10px 0;
-      border-radius: 10px;
       border: none;
       outline: none;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.92);
     }
 
     button {
       width: 100%;
       padding: 12px;
+      margin-top: 10px;
       border: none;
       border-radius: 10px;
-      background: linear-gradient(135deg, #ff6a00, #ee0979);
       color: white;
       font-size: 16px;
+      background: linear-gradient(135deg, #ff6a00, #ee0979);
       cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      transform: scale(1.05);
     }
 
     .hidden {
@@ -93,10 +84,6 @@
   </style>
 </head>
 <body>
-  <div class="books-line">
-    📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚 📚
-  </div>
-
   <div class="container">
     <h2>🎓 Online Exam Login</h2>
 
@@ -137,32 +124,27 @@
 
       if (users[u] && users[u].password === p) {
         currentUser = u;
-        let msg = document.getElementById("loginMsg");
-        msg.style.color = "lightgreen";
-        msg.innerText = "Login Successful ✅";
-
+        loginMsg.style.color = "lightgreen";
+        loginMsg.innerText = "Login Successful ✅";
         setTimeout(() => {
-          document.getElementById("loginPage").classList.add("hidden");
-          document.getElementById("fpPage").classList.remove("hidden");
-        }, 1000);
+          loginPage.classList.add("hidden");
+          fpPage.classList.remove("hidden");
+        }, 800);
       } else {
-        let msg = document.getElementById("loginMsg");
-        msg.style.color = "red";
-        msg.innerText = "Invalid Username or Password ❌";
+        loginMsg.style.color = "red";
+        loginMsg.innerText = "Invalid Username or Password ❌";
       }
     }
 
     function fingerprint() {
       let fp = prompt("Enter Fingerprint ID:");
-      if (users[currentUser].fingerprint === fp) {
-        let msg = document.getElementById("fpMsg");
-        msg.style.color = "lightgreen";
-        msg.innerText = "Fingerprint Successful ✅";
+      if (users[currentUser] && users[currentUser].fingerprint === fp) {
+        fpMsg.style.color = "lightgreen";
+        fpMsg.innerText = "Fingerprint Successful ✅";
         window.location.href = "admin.html";
       } else {
-        let msg = document.getElementById("fpMsg");
-        msg.style.color = "red";
-        msg.innerText = "Fingerprint Failed ❌";
+        fpMsg.style.color = "red";
+        fpMsg.innerText = "Fingerprint Failed ❌";
       }
     }
   </script>
